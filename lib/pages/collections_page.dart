@@ -11,7 +11,7 @@ class CollectionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get dynamic collection data
     final collections = ProductService.getCollections();
-    
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -54,16 +54,18 @@ class CollectionsPage extends StatelessWidget {
                     childAspectRatio: 1.2,
                     crossAxisSpacing: 24,
                     mainAxisSpacing: 24,
-                    children: collections.map((collection) => 
-                      CollectionCard(
-                        title: collection['name'] as String,
-                        description: collection['description'] as String,
-                        imageUrl: collection['imageUrl'] as String,
-                        itemCount: '${collection['productCount']} items',
-                        collectionId: collection['id'] as String,
-                        isSale: collection['id'] == 'sale',
-                      ),
-                    ).toList(),
+                    children: collections
+                        .map(
+                          (collection) => CollectionCard(
+                            title: collection['name'] as String,
+                            description: collection['description'] as String,
+                            imageUrl: collection['imageUrl'] as String,
+                            itemCount: '${collection['productCount']} items',
+                            collectionId: collection['id'] as String,
+                            isSale: collection['id'] == 'sale',
+                          ),
+                        )
+                        .toList(),
                   ),
 
                   const SizedBox(height: 32),
@@ -91,15 +93,19 @@ class CollectionsPage extends StatelessWidget {
                   GridView.count(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount:
-                        MediaQuery.of(context).size.width > 800 ? 3 :
-                        MediaQuery.of(context).size.width > 600 ? 2 : 1,
+                    crossAxisCount: MediaQuery.of(context).size.width > 800
+                        ? 3
+                        : MediaQuery.of(context).size.width > 600
+                            ? 2
+                            : 1,
                     childAspectRatio: 0.8,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 24,
-                    children: ProductService.getFeaturedProducts().map((product) =>
-                      ProductCardWidget(product: product),
-                    ).toList(),
+                    children: ProductService.getFeaturedProducts()
+                        .map(
+                          (product) => ProductCardWidget(product: product),
+                        )
+                        .toList(),
                   ),
                 ],
               ),
@@ -137,7 +143,7 @@ class CollectionCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
-          context, 
+          context,
           '/collection',
           arguments: {'collectionId': collectionId},
         );
@@ -294,7 +300,7 @@ class ProductCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
-          context, 
+          context,
           '/product',
           arguments: {'productId': product.id},
         );
@@ -326,7 +332,8 @@ class ProductCardWidget extends StatelessWidget {
                 child: Stack(
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(8)),
                       child: Image.network(
                         product.imageUrl,
                         width: double.infinity,
@@ -346,12 +353,13 @@ class ProductCardWidget extends StatelessWidget {
                         },
                       ),
                     ),
-                    if (product.isOnSale) 
+                    if (product.isOnSale)
                       Positioned(
                         top: 8,
                         left: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(4),
@@ -390,7 +398,8 @@ class ProductCardWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: const Color(0xFF4d2963).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -407,7 +416,8 @@ class ProductCardWidget extends StatelessWidget {
                     const Spacer(),
                     Row(
                       children: [
-                        if (product.originalPrice != null && product.originalPrice! > product.price) ...[
+                        if (product.originalPrice != null &&
+                            product.originalPrice! > product.price) ...[
                           Text(
                             '£${product.originalPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(

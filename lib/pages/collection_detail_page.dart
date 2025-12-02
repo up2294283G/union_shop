@@ -44,10 +44,14 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
         filteredProducts = filteredProducts.where((p) => p.price < 10).toList();
         break;
       case '£10 - £25':
-        filteredProducts = filteredProducts.where((p) => p.price >= 10 && p.price <= 25).toList();
+        filteredProducts = filteredProducts
+            .where((p) => p.price >= 10 && p.price <= 25)
+            .toList();
         break;
       case '£25 - £50':
-        filteredProducts = filteredProducts.where((p) => p.price >= 25 && p.price <= 50).toList();
+        filteredProducts = filteredProducts
+            .where((p) => p.price >= 25 && p.price <= 50)
+            .toList();
         break;
       case 'Over £50':
         filteredProducts = filteredProducts.where((p) => p.price > 50).toList();
@@ -56,11 +60,14 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
 
     // Apply category filter
     if (selectedCategory != 'All') {
-      filteredProducts = filteredProducts.where((p) => p.category == selectedCategory).toList();
+      filteredProducts = filteredProducts
+          .where((p) => p.category == selectedCategory)
+          .toList();
     }
 
     // Apply sorting
-    filteredProducts = ProductService.sortProducts(filteredProducts, selectedSort);
+    filteredProducts =
+        ProductService.sortProducts(filteredProducts, selectedSort);
 
     setState(() {});
   }
@@ -273,27 +280,27 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
             Container(
               color: Colors.white,
               padding: const EdgeInsets.all(24),
-              child: filteredProducts.isEmpty 
-                ? _buildEmptyState()
-                : GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount:
-                          MediaQuery.of(context).size.width > 600 ? 3 : 2,
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 24,
+              child: filteredProducts.isEmpty
+                  ? _buildEmptyState()
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount:
+                            MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 24,
+                      ),
+                      itemCount: filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = filteredProducts[index];
+                        return DynamicProductCard(
+                          product: product,
+                          onAddToCart: () => _addToCart(product),
+                        );
+                      },
                     ),
-                    itemCount: filteredProducts.length,
-                    itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
-                      return DynamicProductCard(
-                        product: product,
-                        onAddToCart: () => _addToCart(product),
-                      );
-                    },
-                  ),
             ),
 
             // Footer
@@ -359,7 +366,7 @@ class DynamicProductCard extends StatelessWidget {
   final VoidCallback onAddToCart;
 
   const DynamicProductCard({
-    super.key, 
+    super.key,
     required this.product,
     required this.onAddToCart,
   });
@@ -369,7 +376,7 @@ class DynamicProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
-          context, 
+          context,
           '/product',
           arguments: {'productId': product.id},
         );
@@ -464,7 +471,8 @@ class DynamicProductCard extends StatelessWidget {
                           minWidth: 36,
                           minHeight: 36,
                         ),
-                        onPressed: product.stockQuantity > 0 ? onAddToCart : null,
+                        onPressed:
+                            product.stockQuantity > 0 ? onAddToCart : null,
                       ),
                     ),
                   ),
@@ -491,7 +499,8 @@ class DynamicProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: const Color(0xFF4d2963).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -508,7 +517,8 @@ class DynamicProductCard extends StatelessWidget {
                     const Spacer(),
                     Row(
                       children: [
-                        if (product.originalPrice != null && product.originalPrice! > product.price) ...[
+                        if (product.originalPrice != null &&
+                            product.originalPrice! > product.price) ...[
                           Text(
                             '£${product.originalPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(
@@ -524,7 +534,9 @@ class DynamicProductCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: product.isOnSale ? Colors.red : const Color(0xFF4d2963),
+                            color: product.isOnSale
+                                ? Colors.red
+                                : const Color(0xFF4d2963),
                           ),
                         ),
                       ],

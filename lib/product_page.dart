@@ -8,7 +8,7 @@ import 'package:union_shop/models/product.dart';
 
 class ProductPage extends StatefulWidget {
   final String? productId;
-  
+
   const ProductPage({super.key, this.productId});
 
   @override
@@ -36,7 +36,7 @@ class _ProductPageState extends State<ProductPage> {
       final allProducts = ProductService.getAllProducts();
       product = allProducts.isNotEmpty ? allProducts.first : null;
     }
-    
+
     // Set default selections if available
     if (product != null) {
       if (product!.sizes.isNotEmpty) {
@@ -46,7 +46,7 @@ class _ProductPageState extends State<ProductPage> {
         selectedColor = product!.colors.first;
       }
     }
-    
+
     setState(() {
       isLoading = false;
     });
@@ -55,12 +55,12 @@ class _ProductPageState extends State<ProductPage> {
   void _addToCart() {
     if (product != null) {
       context.read<CartProvider>().addToCart(
-        product!,
-        quantity: quantity,
-        selectedSize: selectedSize,
-        selectedColor: selectedColor,
-      );
-      
+            product!,
+            quantity: quantity,
+            selectedSize: selectedSize,
+            selectedColor: selectedColor,
+          );
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Added ${product!.title} to cart'),
@@ -115,7 +115,8 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () => Navigator.pushNamed(context, '/collections'),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/collections'),
                       child: const Text('Browse Collections'),
                     ),
                   ],
@@ -157,7 +158,8 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                       const Text(' > ', style: TextStyle(color: Colors.grey)),
                       GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/collections'),
+                        onTap: () =>
+                            Navigator.pushNamed(context, '/collections'),
                         child: const Text(
                           'Collections',
                           style: TextStyle(
@@ -232,11 +234,12 @@ class _ProductPageState extends State<ProductPage> {
                       color: Colors.black,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 8),
-                  
+
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: const Color(0xFF4d2963).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -256,7 +259,8 @@ class _ProductPageState extends State<ProductPage> {
                   // Product price
                   Row(
                     children: [
-                      if (product!.originalPrice != null && product!.originalPrice! > product!.price) ...[
+                      if (product!.originalPrice != null &&
+                          product!.originalPrice! > product!.price) ...[
                         Text(
                           '£${product!.originalPrice!.toStringAsFixed(2)}',
                           style: const TextStyle(
@@ -275,10 +279,12 @@ class _ProductPageState extends State<ProductPage> {
                           color: Color(0xFF4d2963),
                         ),
                       ),
-                      if (product!.originalPrice != null && product!.originalPrice! > product!.price) ...[
+                      if (product!.originalPrice != null &&
+                          product!.originalPrice! > product!.price) ...[
                         const SizedBox(width: 12),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: Colors.red[100],
                             borderRadius: BorderRadius.circular(12),
@@ -316,11 +322,16 @@ class _ProductPageState extends State<ProductPage> {
                         return GestureDetector(
                           onTap: () => setState(() => selectedSize = size),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF4d2963) : Colors.white,
+                              color: isSelected
+                                  ? const Color(0xFF4d2963)
+                                  : Colors.white,
                               border: Border.all(
-                                color: isSelected ? const Color(0xFF4d2963) : Colors.grey[300]!,
+                                color: isSelected
+                                    ? const Color(0xFF4d2963)
+                                    : Colors.grey[300]!,
                               ),
                               borderRadius: BorderRadius.circular(6),
                             ),
@@ -356,11 +367,16 @@ class _ProductPageState extends State<ProductPage> {
                         return GestureDetector(
                           onTap: () => setState(() => selectedColor = color),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF4d2963) : Colors.white,
+                              color: isSelected
+                                  ? const Color(0xFF4d2963)
+                                  : Colors.white,
                               border: Border.all(
-                                color: isSelected ? const Color(0xFF4d2963) : Colors.grey[300]!,
+                                color: isSelected
+                                    ? const Color(0xFF4d2963)
+                                    : Colors.grey[300]!,
                               ),
                               borderRadius: BorderRadius.circular(6),
                             ),
@@ -391,12 +407,15 @@ class _ProductPageState extends State<ProductPage> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: quantity > 1 ? () => setState(() => quantity--) : null,
+                        onPressed: quantity > 1
+                            ? () => setState(() => quantity--)
+                            : null,
                         icon: const Icon(Icons.remove_circle_outline),
                         color: const Color(0xFF4d2963),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey[300]!),
                           borderRadius: BorderRadius.circular(8),
@@ -434,7 +453,9 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                       ),
                       child: Text(
-                        product!.stockQuantity > 0 ? 'ADD TO CART' : 'OUT OF STOCK',
+                        product!.stockQuantity > 0
+                            ? 'ADD TO CART'
+                            : 'OUT OF STOCK',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

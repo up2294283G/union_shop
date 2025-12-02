@@ -88,7 +88,8 @@ class CartPage extends StatelessWidget {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: cartProvider.items.length,
-                            separatorBuilder: (context, index) => const Divider(height: 32),
+                            separatorBuilder: (context, index) =>
+                                const Divider(height: 32),
                             itemBuilder: (context, index) {
                               final cartItem = cartProvider.items[index];
                               return CartItemWidget(cartItem: cartItem);
@@ -118,7 +119,8 @@ class CartPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
                                       'Subtotal:',
@@ -135,19 +137,22 @@ class CartPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
                                       'Delivery:',
                                       style: TextStyle(fontSize: 16),
                                     ),
                                     Text(
-                                      cartProvider.totalAmount >= 50 ? 'FREE' : '£4.99',
+                                      cartProvider.totalAmount >= 50
+                                          ? 'FREE'
+                                          : '£4.99',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        color: cartProvider.totalAmount >= 50 
-                                            ? Colors.green 
+                                        color: cartProvider.totalAmount >= 50
+                                            ? Colors.green
                                             : Colors.black87,
                                       ),
                                     ),
@@ -168,7 +173,8 @@ class CartPage extends StatelessWidget {
                                 const Divider(),
                                 const SizedBox(height: 16),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
                                       'Total:',
@@ -355,9 +361,11 @@ class CartItemWidget extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              if (cartItem.selectedSize != null || cartItem.selectedColor != null)
+              if (cartItem.selectedSize != null ||
+                  cartItem.selectedColor != null)
                 Text(
-                  '${cartItem.selectedSize ?? ''} ${cartItem.selectedColor ?? ''}'.trim(),
+                  '${cartItem.selectedSize ?? ''} ${cartItem.selectedColor ?? ''}'
+                      .trim(),
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
@@ -385,11 +393,11 @@ class CartItemWidget extends StatelessWidget {
                   onPressed: () {
                     if (cartItem.quantity > 1) {
                       context.read<CartProvider>().updateQuantity(
-                        cartItem.product.id,
-                        cartItem.quantity - 1,
-                        selectedSize: cartItem.selectedSize,
-                        selectedColor: cartItem.selectedColor,
-                      );
+                            cartItem.product.id,
+                            cartItem.quantity - 1,
+                            selectedSize: cartItem.selectedSize,
+                            selectedColor: cartItem.selectedColor,
+                          );
                     }
                   },
                   icon: const Icon(Icons.remove_circle_outline),
@@ -399,7 +407,8 @@ class CartItemWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey[300]!),
                     borderRadius: BorderRadius.circular(4),
@@ -415,11 +424,11 @@ class CartItemWidget extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     context.read<CartProvider>().updateQuantity(
-                      cartItem.product.id,
-                      cartItem.quantity + 1,
-                      selectedSize: cartItem.selectedSize,
-                      selectedColor: cartItem.selectedColor,
-                    );
+                          cartItem.product.id,
+                          cartItem.quantity + 1,
+                          selectedSize: cartItem.selectedSize,
+                          selectedColor: cartItem.selectedColor,
+                        );
                   },
                   icon: const Icon(Icons.add_circle_outline),
                   constraints: const BoxConstraints(
@@ -433,10 +442,10 @@ class CartItemWidget extends StatelessWidget {
             TextButton.icon(
               onPressed: () {
                 context.read<CartProvider>().removeFromCart(
-                  cartItem.product.id,
-                  selectedSize: cartItem.selectedSize,
-                  selectedColor: cartItem.selectedColor,
-                );
+                      cartItem.product.id,
+                      selectedSize: cartItem.selectedSize,
+                      selectedColor: cartItem.selectedColor,
+                    );
               },
               icon: const Icon(Icons.delete_outline, size: 16),
               label: const Text('Remove'),

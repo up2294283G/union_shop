@@ -38,19 +38,24 @@ class UnionShopApp extends StatelessWidget {
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case '/':
-              return MaterialPageRoute(builder: (context) => const HomeScreen());
+              return MaterialPageRoute(
+                  builder: (context) => const HomeScreen());
             case '/about':
-              return MaterialPageRoute(builder: (context) => const AboutUsPage());
+              return MaterialPageRoute(
+                  builder: (context) => const AboutUsPage());
             case '/collections':
-              return MaterialPageRoute(builder: (context) => const CollectionsPage());
+              return MaterialPageRoute(
+                  builder: (context) => const CollectionsPage());
             case '/login':
               return MaterialPageRoute(builder: (context) => const LoginPage());
             case '/signup':
-              return MaterialPageRoute(builder: (context) => const SignupPage());
+              return MaterialPageRoute(
+                  builder: (context) => const SignupPage());
             case '/cart':
               return MaterialPageRoute(builder: (context) => const CartPage());
             case '/sale':
-              return MaterialPageRoute(builder: (context) => const SaleCollectionPage());
+              return MaterialPageRoute(
+                  builder: (context) => const SaleCollectionPage());
             case '/product':
               final args = settings.arguments as Map<String, dynamic>?;
               final productId = args?['productId'] as String?;
@@ -59,12 +64,15 @@ class UnionShopApp extends StatelessWidget {
               );
             case '/collection':
               final args = settings.arguments as Map<String, dynamic>?;
-              final collectionId = args?['collectionId'] as String? ?? 'apparel';
+              final collectionId =
+                  args?['collectionId'] as String? ?? 'apparel';
               return MaterialPageRoute(
-                builder: (context) => CollectionDetailPage(collectionId: collectionId),
+                builder: (context) =>
+                    CollectionDetailPage(collectionId: collectionId),
               );
             default:
-              return MaterialPageRoute(builder: (context) => const HomeScreen());
+              return MaterialPageRoute(
+                  builder: (context) => const HomeScreen());
           }
         },
       ),
@@ -192,9 +200,12 @@ class HomeScreen extends StatelessWidget {
                           MediaQuery.of(context).size.width > 600 ? 2 : 1,
                       crossAxisSpacing: 24,
                       mainAxisSpacing: 48,
-                      children: ProductService.getFeaturedProducts().take(4).map((product) => 
-                        HomeProductCard(product: product),
-                      ).toList(),
+                      children: ProductService.getFeaturedProducts()
+                          .take(4)
+                          .map(
+                            (product) => HomeProductCard(product: product),
+                          )
+                          .toList(),
                     ),
                   ],
                 ),
@@ -277,7 +288,7 @@ class HomeProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
-          context, 
+          context,
           '/product',
           arguments: {'productId': product.id},
         );
@@ -303,7 +314,8 @@ class HomeProductCard extends StatelessWidget {
                         return Container(
                           color: Colors.grey[300],
                           child: const Center(
-                            child: Icon(Icons.image_not_supported, color: Colors.grey),
+                            child: Icon(Icons.image_not_supported,
+                                color: Colors.grey),
                           ),
                         );
                       },
@@ -314,7 +326,8 @@ class HomeProductCard extends StatelessWidget {
                       top: 8,
                       left: 8,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(4),
@@ -340,7 +353,7 @@ class HomeProductCard extends StatelessWidget {
               Text(
                 product.title,
                 style: const TextStyle(
-                  fontSize: 14, 
+                  fontSize: 14,
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
                 ),
@@ -350,7 +363,8 @@ class HomeProductCard extends StatelessWidget {
               const SizedBox(height: 4),
               Row(
                 children: [
-                  if (product.originalPrice != null && product.originalPrice! > product.price) ...[
+                  if (product.originalPrice != null &&
+                      product.originalPrice! > product.price) ...[
                     Text(
                       '£${product.originalPrice!.toStringAsFixed(2)}',
                       style: const TextStyle(
@@ -366,7 +380,9 @@ class HomeProductCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: product.isOnSale ? Colors.red : const Color(0xFF4d2963),
+                      color: product.isOnSale
+                          ? Colors.red
+                          : const Color(0xFF4d2963),
                     ),
                   ),
                 ],
@@ -393,3 +409,4 @@ class HomeProductCard extends StatelessWidget {
       ),
     );
   }
+}

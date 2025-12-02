@@ -104,7 +104,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const SizedBox(height: 32),
-
                           Form(
                             key: _formKey,
                             child: Column(
@@ -148,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       onPressed: () {
                                         setState(() {
-                                          _isPasswordVisible = !_isPasswordVisible;
+                                          _isPasswordVisible =
+                                              !_isPasswordVisible;
                                         });
                                       },
                                     ),
@@ -167,7 +167,8 @@ class _LoginPageState extends State<LoginPage> {
 
                                 // Remember me and forgot password
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -186,15 +187,18 @@ class _LoginPageState extends State<LoginPage> {
                                     TextButton(
                                       onPressed: () {
                                         // Placeholder for forgot password
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
-                                            content: Text('Forgot password feature coming soon!'),
+                                            content: Text(
+                                                'Forgot password feature coming soon!'),
                                           ),
                                         );
                                       },
                                       child: const Text(
                                         'Forgot Password?',
-                                        style: TextStyle(color: Color(0xFF4d2963)),
+                                        style:
+                                            TextStyle(color: Color(0xFF4d2963)),
                                       ),
                                     ),
                                   ],
@@ -230,7 +234,8 @@ class _LoginPageState extends State<LoginPage> {
                                   children: [
                                     Expanded(child: Divider()),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 16),
                                       child: Text('OR'),
                                     ),
                                     Expanded(child: Divider()),
@@ -244,13 +249,16 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 50,
                                   child: OutlinedButton.icon(
                                     onPressed: () {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
-                                          content: Text('Google sign-in coming soon!'),
+                                          content: Text(
+                                              'Google sign-in coming soon!'),
                                         ),
                                       );
                                     },
-                                    icon: const Icon(Icons.g_mobiledata, size: 24),
+                                    icon: const Icon(Icons.g_mobiledata,
+                                        size: 24),
                                     label: const Text('Continue with Google'),
                                     style: OutlinedButton.styleFrom(
                                       shape: RoundedRectangleBorder(

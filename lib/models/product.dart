@@ -37,8 +37,8 @@ class Product {
   }
 
   String get formattedPrice => '£${price.toStringAsFixed(2)}';
-  
-  String? get formattedOriginalPrice => 
+
+  String? get formattedOriginalPrice =>
       originalPrice != null ? '£${originalPrice!.toStringAsFixed(2)}' : null;
 
   bool get hasVariations => sizes.isNotEmpty || colors.isNotEmpty;
