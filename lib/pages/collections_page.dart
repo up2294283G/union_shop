@@ -9,24 +9,17 @@ class CollectionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get dynamic collection data
-    final collections = ProductService.getCollections();
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Navigation bar
             const NavBar(),
-
-            // Collections content
             Container(
               color: Colors.white,
               padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Page title
                   const Text(
                     'Collections',
                     style: TextStyle(
@@ -45,27 +38,35 @@ class CollectionsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
 
-                  // Collections grid
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount:
-                        MediaQuery.of(context).size.width > 600 ? 2 : 1,
-                    childAspectRatio: 1.2,
-                    crossAxisSpacing: 24,
-                    mainAxisSpacing: 24,
-                    children: collections
-                        .map(
-                          (collection) => CollectionCard(
-                            title: collection['name'] as String,
-                            description: collection['description'] as String,
-                            imageUrl: collection['imageUrl'] as String,
-                            itemCount: '${collection['productCount']} items',
-                            collectionId: collection['id'] as String,
-                            isSale: collection['id'] == 'sale',
-                          ),
-                        )
-                        .toList(),
+                  // Collections grid with responsive layout
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
+                      final aspectRatio =
+                          constraints.maxWidth > 600 ? 1.2 : 0.9;
+                      final collections = ProductService.getCollections();
+
+                      return GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: crossAxisCount,
+                        childAspectRatio: aspectRatio,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        children: collections
+                            .map((collection) => CollectionCard(
+                                  title: collection['name'] as String,
+                                  description:
+                                      collection['description'] as String,
+                                  imageUrl: collection['imageUrl'] as String,
+                                  itemCount:
+                                      '${collection['productCount']} items',
+                                  collectionId: collection['id'] as String,
+                                  isSale: collection['id'] == 'sale',
+                                ))
+                            .toList(),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 32),
@@ -89,29 +90,38 @@ class CollectionsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Featured products grid
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: MediaQuery.of(context).size.width > 800
-                        ? 3
-                        : MediaQuery.of(context).size.width > 600
-                            ? 2
-                            : 1,
-                    childAspectRatio: 0.8,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 24,
-                    children: ProductService.getFeaturedProducts()
-                        .map(
-                          (product) => ProductCardWidget(product: product),
-                        )
-                        .toList(),
+                  // Featured products grid with responsive layout
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      int crossAxisCount = 1;
+                      double aspectRatio = 1.0;
+                      if (constraints.maxWidth > 800) {
+                        crossAxisCount = 3;
+                        aspectRatio = 1.1;
+                      } else if (constraints.maxWidth > 600) {
+                        crossAxisCount = 2;
+                        aspectRatio = 1.0;
+                      } else {
+                        aspectRatio = 1.2;
+                      }
+
+                      return GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: crossAxisCount,
+                        childAspectRatio: aspectRatio,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        children: ProductService.getFeaturedProducts()
+                            .map((product) =>
+                                ProductCardWidget(product: product))
+                            .toList(),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
-
-            // Footer
             const Footer(),
           ],
         ),
@@ -135,18 +145,22 @@ class CollectionCard extends StatelessWidget {
     required this.imageUrl,
     required this.itemCount,
     required this.collectionId,
-    this.isSale = false,
+    required this.isSale,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          '/collection',
-          arguments: {'collectionId': collectionId},
-        );
+        if (collectionId == 'sale') {
+          Navigator.pushNamed(context, '/sale');
+        } else {
+          Navigator.pushNamed(
+            context,
+            '/collection',
+            arguments: {'collectionId': collectionId},
+          );
+        }
       },
       child: Container(
         decoration: BoxDecoration(
@@ -154,9 +168,9 @@ class CollectionCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.2),
-              spreadRadius: 2,
-              blurRadius: 8,
+              color: Colors.grey.withValues(alpha: 0.1),
+              spreadRadius: 1,
+              blurRadius: 10,
               offset: const Offset(0, 2),
             ),
           ],
@@ -164,120 +178,98 @@ class CollectionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image section
             Expanded(
               flex: 2,
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(12)),
-                    ),
-                    child: ClipRRect(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12)),
+                  color: Colors.grey[200],
+                ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(12)),
                       child: Image.network(
                         imageUrl,
+                        width: double.infinity,
+                        height: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             color: Colors.grey[200],
                             child: const Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.image_not_supported,
-                                    size: 48,
-                                    color: Colors.grey,
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'Image unavailable',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ],
+                              child: Icon(
+                                Icons.collections_outlined,
+                                color: Colors.grey,
+                                size: 48,
                               ),
                             ),
                           );
                         },
                       ),
                     ),
-                  ),
-                  // Sale badge
-                  if (isSale)
-                    Positioned(
-                      top: 12,
-                      left: 12,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Text(
-                          'SALE',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                    if (isSale)
+                      Positioned(
+                        top: 12,
+                        left: 12,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Text(
+                            'SALE',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
-            // Content section
-            Expanded(
-              flex: 1,
+            Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Color(0xFF4d2963),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Text(
                       description,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         color: Colors.grey[600],
-                        height: 1.3,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        Text(
-                          itemCount,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF4d2963),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                      ],
+                    const SizedBox(height: 4),
+                    Text(
+                      itemCount,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Color(0xFF4d2963),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -313,7 +305,7 @@ class ProductCardWidget extends StatelessWidget {
             BoxShadow(
               color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
-              blurRadius: 4,
+              blurRadius: 6,
               offset: const Offset(0, 2),
             ),
           ],
@@ -321,11 +313,9 @@ class ProductCardWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product image
             Expanded(
               flex: 3,
               child: Container(
-                width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
                 ),
@@ -346,7 +336,7 @@ class ProductCardWidget extends StatelessWidget {
                               child: Icon(
                                 Icons.image_not_supported,
                                 color: Colors.grey,
-                                size: 40,
+                                size: 32,
                               ),
                             ),
                           );
@@ -359,7 +349,7 @@ class ProductCardWidget extends StatelessWidget {
                         left: 8,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(4),
@@ -368,7 +358,7 @@ class ProductCardWidget extends StatelessWidget {
                             'SALE',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -378,42 +368,23 @@ class ProductCardWidget extends StatelessWidget {
                 ),
               ),
             ),
-            // Product details
-            Expanded(
-              flex: 2,
+            Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       product.title,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF4d2963).withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        product.category,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: Color(0xFF4d2963),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
                     Row(
                       children: [
                         if (product.originalPrice != null &&
@@ -421,7 +392,7 @@ class ProductCardWidget extends StatelessWidget {
                           Text(
                             '£${product.originalPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
                             ),
@@ -430,10 +401,12 @@ class ProductCardWidget extends StatelessWidget {
                         ],
                         Text(
                           product.formattedPrice,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF4d2963),
+                            color: product.isOnSale
+                                ? Colors.red
+                                : const Color(0xFF4d2963),
                           ),
                         ),
                       ],

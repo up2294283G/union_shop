@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/cart_provider.dart';
 
-class NavBar extends StatelessWidget {
+class NavBar extends StatefulWidget {
   const NavBar({super.key});
+
+  @override
+  State<NavBar> createState() => _NavBarState();
+}
+
+class _NavBarState extends State<NavBar> {
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearchExpanded = false;
 
   void navigateToHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
@@ -29,8 +37,23 @@ class NavBar extends StatelessWidget {
     Navigator.pushNamed(context, '/cart');
   }
 
-  void placeholderCallbackForButtons() {
-    // Placeholder for buttons that don't have functionality yet
+  void _performSearch(String query) {
+    if (query.trim().isNotEmpty) {
+      Navigator.pushNamed(
+        context,
+        '/search',
+        arguments: {'query': query},
+      );
+    }
+  }
+
+  void _toggleSearch() {
+    setState(() {
+      _isSearchExpanded = !_isSearchExpanded;
+      if (!_isSearchExpanded) {
+        _searchController.clear();
+      }
+    });
   }
 
   @override
@@ -79,12 +102,63 @@ class NavBar extends StatelessWidget {
                       },
                     ),
                   ),
-                  // Navigation icons with responsive handling
-                  Flexible(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Search icon
+                  const SizedBox(width: 16),
+
+                  // Search Bar (expandable on mobile, always visible on desktop)
+                  Expanded(
+                    child: _isSearchExpanded ||
+                            MediaQuery.of(context).size.width > 600
+                        ? Container(
+                            height: 28,
+                            margin: const EdgeInsets.only(right: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                  color: Colors.grey[200]!, width: 0.5),
+                            ),
+                            child: TextField(
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                hintText: 'Search...',
+                                hintStyle: const TextStyle(
+                                    fontSize: 12, color: Colors.grey),
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                  size: 14,
+                                  color: Colors.grey,
+                                ),
+                                suffixIcon: _isSearchExpanded &&
+                                        MediaQuery.of(context).size.width <= 600
+                                    ? IconButton(
+                                        icon: const Icon(
+                                          Icons.close,
+                                          size: 18,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: _toggleSearch,
+                                      )
+                                    : null,
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                              ),
+                              style: const TextStyle(fontSize: 12),
+                              onSubmitted: _performSearch,
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+
+                  // Navigation icons (right-aligned)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Search toggle button (mobile only)
+                      if (MediaQuery.of(context).size.width <= 600 &&
+                          !_isSearchExpanded)
                         IconButton(
                           icon: const Icon(
                             Icons.search,
@@ -96,85 +170,84 @@ class NavBar extends StatelessWidget {
                             minWidth: 32,
                             minHeight: 32,
                           ),
-                          onPressed: placeholderCallbackForButtons,
+                          onPressed: _toggleSearch,
                         ),
-                        // Account/Login icon
-                        IconButton(
-                          icon: const Icon(
-                            Icons.person_outline,
-                            size: 18,
-                            color: Colors.grey,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          constraints: const BoxConstraints(
-                            minWidth: 32,
-                            minHeight: 32,
-                          ),
-                          onPressed: () => navigateToLogin(context),
+                      // Account/Login icon
+                      IconButton(
+                        icon: const Icon(
+                          Icons.person_outline,
+                          size: 18,
+                          color: Colors.grey,
                         ),
-                        // Cart icon with badge
-                        Consumer<CartProvider>(
-                          builder: (context, cartProvider, child) {
-                            return Stack(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.shopping_bag_outlined,
-                                    size: 18,
-                                    color: Colors.grey,
-                                  ),
-                                  padding: const EdgeInsets.all(8),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 32,
-                                    minHeight: 32,
-                                  ),
-                                  onPressed: () => navigateToCart(context),
+                        padding: const EdgeInsets.all(8),
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
+                        onPressed: () => navigateToLogin(context),
+                      ),
+                      // Cart icon with badge
+                      Consumer<CartProvider>(
+                        builder: (context, cartProvider, child) {
+                          return Stack(
+                            children: [
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.shopping_bag_outlined,
+                                  size: 18,
+                                  color: Colors.grey,
                                 ),
-                                if (cartProvider.itemCount > 0)
-                                  Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF4d2963),
-                                        borderRadius: BorderRadius.circular(10),
+                                padding: const EdgeInsets.all(8),
+                                constraints: const BoxConstraints(
+                                  minWidth: 32,
+                                  minHeight: 32,
+                                ),
+                                onPressed: () => navigateToCart(context),
+                              ),
+                              if (cartProvider.itemCount > 0)
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF4d2963),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 16,
+                                      minHeight: 16,
+                                    ),
+                                    child: Text(
+                                      '${cartProvider.itemCount}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      constraints: const BoxConstraints(
-                                        minWidth: 16,
-                                        minHeight: 16,
-                                      ),
-                                      child: Text(
-                                        '${cartProvider.itemCount}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
-                              ],
-                            );
-                          },
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                      // Menu icon
+                      IconButton(
+                        icon: const Icon(
+                          Icons.menu,
+                          size: 18,
+                          color: Colors.grey,
                         ),
-                        // Menu icon
-                        IconButton(
-                          icon: const Icon(
-                            Icons.menu,
-                            size: 18,
-                            color: Colors.grey,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          constraints: const BoxConstraints(
-                            minWidth: 32,
-                            minHeight: 32,
-                          ),
-                          onPressed: () => _showNavigationMenu(context),
+                        padding: const EdgeInsets.all(8),
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
                         ),
-                      ],
-                    ),
+                        onPressed: () => _showNavigationMenu(context),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -188,160 +261,81 @@ class NavBar extends StatelessWidget {
   void _showNavigationMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Menu header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Navigation Menu',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF4d2963),
-                  ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            // Navigation items
-            _buildMenuButton(
-              context,
-              'Home',
-              Icons.home_outlined,
-              () {
-                Navigator.pop(context);
-                navigateToHome(context);
-              },
-            ),
-            _buildMenuButton(
-              context,
-              'Collections',
-              Icons.grid_view_outlined,
-              () {
-                Navigator.pop(context);
-                navigateToCollections(context);
-              },
-            ),
-            _buildMenuButton(
-              context,
-              'Sale Items',
-              Icons.local_offer_outlined,
-              () {
-                Navigator.pop(context);
-                navigateToSale(context);
-              },
-            ),
-            _buildMenuButton(
-              context,
-              'About Us',
-              Icons.info_outline,
-              () {
-                Navigator.pop(context);
-                navigateToAbout(context);
-              },
-            ),
-            _buildMenuButton(
-              context,
-              'My Account',
-              Icons.person_outline,
-              () {
-                Navigator.pop(context);
-                navigateToLogin(context);
-              },
-            ),
-            _buildMenuButton(
-              context,
-              'Shopping Cart',
-              Icons.shopping_bag_outlined,
-              () {
-                Navigator.pop(context);
-                navigateToCart(context);
-              },
-              Consumer<CartProvider>(
-                builder: (context, cartProvider, child) {
-                  return cartProvider.itemCount > 0
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF4d2963),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            '${cartProvider.itemCount}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink();
-                },
               ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+              // Menu items
+              _buildMenuItem(
+                context,
+                'Home',
+                Icons.home_outlined,
+                () => navigateToHome(context),
+              ),
+              _buildMenuItem(
+                context,
+                'Collections',
+                Icons.category_outlined,
+                () => navigateToCollections(context),
+              ),
+              _buildMenuItem(
+                context,
+                'Sale',
+                Icons.local_offer_outlined,
+                () => navigateToSale(context),
+              ),
+              _buildMenuItem(
+                context,
+                'About Us',
+                Icons.info_outline,
+                () => navigateToAbout(context),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildMenuButton(
+  Widget _buildMenuItem(
     BuildContext context,
     String title,
     IconData icon,
-    VoidCallback onTap, [
-    Widget? trailing,
-  ]) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.grey[200]!),
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: const Color(0xFF4d2963), size: 24),
-            const SizedBox(width: 16),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black87,
-              ),
-            ),
-            const Spacer(),
-            if (trailing != null) ...[
-              trailing,
-              const SizedBox(width: 8),
-            ],
-            const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey,
-              size: 16,
-            ),
-          ],
-        ),
+    VoidCallback onTap,
+  ) {
+    return ListTile(
+      leading: Icon(icon, color: const Color(0xFF4d2963)),
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
+      onTap: () {
+        Navigator.pop(context);
+        onTap();
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

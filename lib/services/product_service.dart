@@ -1,4 +1,5 @@
 import '../models/product.dart';
+import 'product_image_service.dart';
 
 class ProductService {
   static final List<Product> _allProducts = [
@@ -9,8 +10,8 @@ class ProductService {
       description:
           'Official University of Portsmouth hoodie made from premium cotton blend. Features embroidered university logo and comfortable kangaroo pocket. Perfect for campus life or casual wear.',
       price: 35.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'Classic Portsmouth Hoodie', 'Clothing'),
       category: 'Clothing',
       collection: 'apparel',
       isFeatured: true,
@@ -24,8 +25,8 @@ class ProductService {
       description:
           'Comfortable cotton t-shirt with Portsmouth University branding. Lightweight and breathable, ideal for everyday wear.',
       price: 18.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'University T-Shirt', 'Clothing'),
       category: 'Clothing',
       collection: 'apparel',
       sizes: ['XS', 'S', 'M', 'L', 'XL'],
@@ -39,8 +40,8 @@ class ProductService {
           'Classic baseball cap with embroidered Portsmouth logo. Adjustable strap ensures perfect fit.',
       price: 15.00,
       originalPrice: 20.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'Portsmouth Baseball Cap', 'Accessories'),
       category: 'Accessories',
       collection: 'apparel',
       isOnSale: true,
@@ -53,8 +54,8 @@ class ProductService {
       description:
           'Premium fleece sweatshirt with university crest. Warm and comfortable for cooler days.',
       price: 28.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'University Sweatshirt', 'Clothing'),
       category: 'Clothing',
       collection: 'apparel',
       sizes: ['S', 'M', 'L', 'XL'],
@@ -69,8 +70,8 @@ class ProductService {
       description:
           'Set of 3 high-quality notebooks with Portsmouth University branding. Lined pages perfect for note-taking.',
       price: 12.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'Portsmouth Notebook Set', 'Stationery'),
       category: 'Stationery',
       collection: 'stationery',
       stockQuantity: 30,
@@ -81,8 +82,8 @@ class ProductService {
       description:
           'Set of premium ballpoint pens with Portsmouth University logo. Smooth writing experience.',
       price: 8.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'University Pen Collection', 'Stationery'),
       category: 'Stationery',
       collection: 'stationery',
       colors: ['Blue', 'Black'],
@@ -96,8 +97,8 @@ class ProductService {
       description:
           'Decorative fridge magnet featuring Portsmouth landmarks. Perfect souvenir for visitors.',
       price: 4.50,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'Portsmouth City Magnet', 'Gifts'),
       category: 'Gifts',
       collection: 'gifts',
       stockQuantity: 100,
@@ -109,7 +110,7 @@ class ProductService {
           'Ceramic mug with Portsmouth University logo. Dishwasher and microwave safe.',
       price: 10.00,
       imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+          ProductImageService.getImageForProduct('University Mug', 'Gifts'),
       category: 'Gifts',
       collection: 'gifts',
       colors: ['White', 'Navy', 'Grey'],
@@ -124,8 +125,8 @@ class ProductService {
           'Eco-friendly cotton tote bag with university logo. Perfect for shopping or books.',
       price: 10.00,
       originalPrice: 16.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'Portsmouth Tote Bag', 'Accessories'),
       category: 'Accessories',
       collection: 'sale',
       isOnSale: true,
@@ -138,8 +139,8 @@ class ProductService {
       description: 'Metal keychain with Portsmouth University logo and colors.',
       price: 3.00,
       originalPrice: 5.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'University Keychain', 'Accessories'),
       category: 'Accessories',
       collection: 'sale',
       isOnSale: true,
@@ -154,7 +155,7 @@ class ProductService {
           'Warm woolen scarf in university colors. Perfect for the autumn season.',
       price: 22.00,
       imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+          ProductImageService.getImageForProduct('Autumn Scarf', 'Accessories'),
       category: 'Accessories',
       collection: 'autumn',
       colors: ['Navy', 'Burgundy', 'Forest Green'],
@@ -168,8 +169,8 @@ class ProductService {
       description:
           'Contemporary polo shirt with subtle Portsmouth branding. Professional yet casual.',
       price: 32.00,
-      imageUrl:
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      imageUrl: ProductImageService.getImageForProduct(
+          'Modern Portsmouth Polo', 'Clothing'),
       category: 'Clothing',
       collection: 'new',
       isFeatured: true,
@@ -305,8 +306,8 @@ class ProductService {
       'description': collectionDescriptions[collectionId] ?? '',
       'productCount': products.length,
       'products': products,
-      'imageUrl':
-          'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+      'imageUrl': ProductImageService.getImageForCollection(
+          collectionNames[collectionId] ?? 'University Apparel'),
     };
   }
 

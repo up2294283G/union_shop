@@ -10,6 +10,7 @@ import 'package:union_shop/pages/sale_collection_page.dart';
 import 'package:union_shop/pages/login_page.dart';
 import 'package:union_shop/pages/signup_page.dart';
 import 'package:union_shop/pages/cart_page.dart';
+import 'package:union_shop/pages/search_page.dart';
 import 'package:union_shop/services/cart_provider.dart';
 import 'package:union_shop/services/product_service.dart';
 import 'package:union_shop/models/product.dart';
@@ -56,6 +57,12 @@ class UnionShopApp extends StatelessWidget {
             case '/sale':
               return MaterialPageRoute(
                   builder: (context) => const SaleCollectionPage());
+            case '/search':
+              final args = settings.arguments as Map<String, dynamic>?;
+              final query = args?['query'] as String?;
+              return MaterialPageRoute(
+                builder: (context) => SearchPage(initialQuery: query),
+              );
             case '/product':
               final args = settings.arguments as Map<String, dynamic>?;
               final productId = args?['productId'] as String?;
@@ -157,7 +164,8 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 32),
                         ElevatedButton(
-                          onPressed: placeholderCallbackForButtons,
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/collections'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF4d2963),
                             foregroundColor: Colors.white,

@@ -288,9 +288,9 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount:
                             MediaQuery.of(context).size.width > 600 ? 3 : 2,
-                        childAspectRatio: 0.7,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 24,
+                        childAspectRatio: 0.55,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 16,
                       ),
                       itemCount: filteredProducts.length,
                       itemBuilder: (context, index) {
@@ -398,8 +398,8 @@ class DynamicProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product image
-            Expanded(
-              flex: 3,
+            Flexible(
+              flex: 2,
               child: Stack(
                 children: [
                   Container(
@@ -420,7 +420,7 @@ class DynamicProductCard extends StatelessWidget {
                             child: const Center(
                               child: Icon(
                                 Icons.image_not_supported,
-                                size: 40,
+                                size: 32,
                                 color: Colors.grey,
                               ),
                             ),
@@ -432,11 +432,11 @@ class DynamicProductCard extends StatelessWidget {
                   // Sale badge
                   if (product.isOnSale)
                     Positioned(
-                      top: 8,
-                      left: 8,
+                      top: 6,
+                      left: 6,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 3),
+                            horizontal: 4, vertical: 2),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(3),
@@ -445,7 +445,7 @@ class DynamicProductCard extends StatelessWidget {
                           'SALE',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 10,
+                            fontSize: 9,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -453,23 +453,23 @@ class DynamicProductCard extends StatelessWidget {
                     ),
                   // Quick add to cart button
                   Positioned(
-                    bottom: 8,
-                    right: 8,
+                    bottom: 6,
+                    right: 6,
                     child: Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFF4d2963),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: IconButton(
                         icon: const Icon(
                           Icons.add_shopping_cart,
                           color: Colors.white,
-                          size: 20,
+                          size: 16,
                         ),
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(6),
                         constraints: const BoxConstraints(
-                          minWidth: 36,
-                          minHeight: 36,
+                          minWidth: 32,
+                          minHeight: 32,
                         ),
                         onPressed:
                             product.stockQuantity > 0 ? onAddToCart : null,
@@ -480,35 +480,36 @@ class DynamicProductCard extends StatelessWidget {
               ),
             ),
             // Product details
-            Expanded(
-              flex: 2,
+            Flexible(
+              flex: 1,
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       product.title,
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                          horizontal: 6, vertical: 1),
                       decoration: BoxDecoration(
                         color: const Color(0xFF4d2963).withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         product.category,
                         style: const TextStyle(
-                          fontSize: 10,
+                          fontSize: 9,
                           color: Color(0xFF4d2963),
                           fontWeight: FontWeight.w600,
                         ),
@@ -522,17 +523,17 @@ class DynamicProductCard extends StatelessWidget {
                           Text(
                             '£${product.originalPrice!.toStringAsFixed(2)}',
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
-                          const SizedBox(width: 4),
+                          const SizedBox(width: 2),
                         ],
                         Text(
                           product.formattedPrice,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.bold,
                             color: product.isOnSale
                                 ? Colors.red
@@ -545,7 +546,7 @@ class DynamicProductCard extends StatelessWidget {
                       const Text(
                         'Out of Stock',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 9,
                           color: Colors.red,
                           fontWeight: FontWeight.w500,
                         ),
