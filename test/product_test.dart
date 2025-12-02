@@ -19,7 +19,7 @@ void main() {
 
       // Check that basic UI elements are present
       expect(
-        find.text('PLACEHOLDER HEADER TEXT'),
+        find.text('FREE DELIVERY ON ORDERS OVER £50'),
         findsOneWidget,
       );
       expect(find.text('Placeholder Product Name'), findsOneWidget);
@@ -64,7 +64,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check that footer is present
-      expect(find.text('Placeholder Footer'), findsOneWidget);
+      expect(find.text('© 2025 University of Portsmouth Students\' Union'), findsOneWidget);
     });
   });
 }
