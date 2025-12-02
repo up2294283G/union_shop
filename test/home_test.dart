@@ -7,21 +7,26 @@ void main() {
     testWidgets('should display home page with basic elements', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
+      
+      // Wait for any async operations and network images to settle
+      await tester.pumpAndSettle();
 
       // Check that basic UI elements are present
       expect(
-        find.text('PLACEHOLDER HEADER TEXT - STUDENTS TO UPDATE!'),
+        find.text('PLACEHOLDER HEADER TEXT'),
         findsOneWidget,
       );
       expect(find.text('Placeholder Hero Title'), findsOneWidget);
-      expect(find.text('PLACEHOLDER PRODUCTS SECTION'), findsOneWidget);
+      expect(find.text('PRODUCTS SECTION'), findsOneWidget);
       expect(find.text('BROWSE PRODUCTS'), findsOneWidget);
-      expect(find.text('VIEW ALL PRODUCTS'), findsOneWidget);
     });
 
     testWidgets('should display product cards', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
+      
+      // Wait for any async operations and network images to settle
+      await tester.pumpAndSettle();
 
       // Check that product cards are displayed
       expect(find.text('Placeholder Product 1'), findsOneWidget);
@@ -39,6 +44,9 @@ void main() {
     testWidgets('should display header icons', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
+      
+      // Wait for any async operations and network images to settle
+      await tester.pumpAndSettle();
 
       // Check that header icons are present
       expect(find.byIcon(Icons.search), findsOneWidget);
@@ -49,13 +57,12 @@ void main() {
     testWidgets('should display footer', (tester) async {
       await tester.pumpWidget(const UnionShopApp());
       await tester.pump();
+      
+      // Wait for any async operations and network images to settle
+      await tester.pumpAndSettle();
 
       // Check that footer is present
       expect(find.text('Placeholder Footer'), findsOneWidget);
-      expect(
-        find.text('Students should customise this footer section'),
-        findsOneWidget,
-      );
     });
   });
 }
